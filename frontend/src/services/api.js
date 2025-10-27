@@ -1,10 +1,12 @@
 import axios from 'axios';
+import config from '../config';
 
-const API_URL = '/api';
+const API_URL = `${config.apiBaseUrl}/api`;
 
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
+  timeout: config.apiTimeout,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -46,7 +48,8 @@ export const roadmapAPI = {
   updateRoadmap: (id, data) => api.put(`/roadmap/${id}`, data),
   deleteRoadmap: (id) => api.delete(`/roadmap/${id}`),
   addQuestion: (id, question) => api.post(`/roadmap/${id}/question`, { question }),
-  answerQuestion: (id, questionId, answer) => api.put(`/roadmap/${id}/question/${questionId}`, { answer })
+  answerQuestion: (id, questionId, answer) =>
+    api.put(`/roadmap/${id}/question/${questionId}`, { answer })
 };
 
 export default api;
