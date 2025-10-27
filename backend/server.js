@@ -14,9 +14,20 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    'https://mentorconnectendermproject.vercel.app',
+    process.env.CORS_ORIGIN
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Health check endpoint for Render
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: 'healthy', time: new Date().toISOString() });
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
