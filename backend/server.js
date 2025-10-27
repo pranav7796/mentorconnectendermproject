@@ -19,7 +19,23 @@ app.use(cors({
     'https://mentorconnectendermproject.vercel.app',
     process.env.CORS_ORIGIN
   ],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+}));
+
+// Explicitly handle preflight requests for all routes
+app.options('*', cors({
+  origin: [
+    'https://mentorconnectendermproject.vercel.app',
+    process.env.CORS_ORIGIN
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 204
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
