@@ -19,7 +19,7 @@
     },
     {
       "src": "/api/(.*)",
-      "dest": "https://mentorconnect-backend.onrender.com/api/$1"
+      "dest": "https://mentorconnectbackend.onrender.com/api/$1"
     },
     {
       "src": "/(.*)",
@@ -27,6 +27,6 @@
     }
   ],
   "env": {
-    "VITE_API_BASE_URL": "https://mentorconnect-backend.onrender.com"
+    "VITE_API_BASE_URL": "https://mentorconnectbackend.onrender.com"
   }
 }
