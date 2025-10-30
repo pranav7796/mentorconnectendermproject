@@ -4,9 +4,26 @@ Personalized Mentorship Platform built with the MERN Stack
 MentorConnect is a full-stack web application that bridges the gap between students and mentors through personalized learning roadmaps, progress tracking, and direct mentorship.
 
 💡 “Empowering students to learn smarter with personalized mentorship.”
+💡 Problem
 
-🚀 Overview
+Most students and early professionals struggle to land their first job — not because of lack of skill, but because they don’t have connections or referrals inside companies.
 
+🚀 Solution — MentorConnect
+
+MentorConnect bridges this gap by connecting students with experienced mentors who can:
+
+Offer career guidance and mock interviews
+
+Help build strong resumes and portfolios
+
+Provide referrals when the mentee is ready and capable
+
+🌱 Impact
+
+This not only increases job opportunities for mentees but also creates a community of professionals helping each other grow, making referrals more transparent and merit-based.
+
+
+🚀 Overview:-
 MentorConnect enables:
 
 👨‍🎓 Students to
