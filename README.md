@@ -1,52 +1,52 @@
 🌟 MentorConnect
 Personalized Mentorship Platform built with the MERN Stack
 
-MentorConnect is a full-stack web application that bridges the gap between students and mentors by providing personalized learning roadmaps, progress tracking, and direct mentorship.
+MentorConnect is a full-stack web application that bridges the gap between students and mentors through personalized learning roadmaps, progress tracking, and direct mentorship.
 
-This project demonstrates end-to-end MERN development, including authentication, CRUD operations, protected APIs, and a dynamic frontend dashboard.
+💡 “Empowering students to learn smarter with personalized mentorship.”
 
-🚀 Project Overview
+🚀 Overview
 
-“Empowering students to learn smarter with personalized mentorship.”
+MentorConnect enables:
 
-MentorConnect allows students to:
+👨‍🎓 Students to
 
-Find mentors by domain and experience
+Discover mentors by domain and experience
 
 Access structured learning roadmaps
 
 Track progress and receive feedback
 
-And mentors to:
+🧑‍🏫 Mentors to
 
-Create and manage learning roadmaps
+Create and manage custom roadmaps
 
 Track student performance
 
 Interact and guide students directly
 
 🧩 Key Features
-👨‍🎓 Student Side
+🎓 Student Dashboard
 
-🔍 Browse Mentors: Explore available mentors with details on expertise and experience.
+🔍 Browse Mentors: Explore mentors by expertise and experience.
 
-🗺️ View Roadmaps: Get assigned learning paths with structured tasks and deadlines.
+🗺️ Learning Roadmaps: Follow structured learning paths with goals and tasks.
 
-✅ Track Progress: Mark completed tasks and view performance statistics.
+✅ Progress Tracking: Mark completed tasks and monitor overall progress.
 
-💬 Q&A System: Ask mentors questions and get personalized answers.
+💬 Q&A System: Ask mentors questions and get personalized replies.
 
-📊 Progress Reports: Receive mentor evaluations with feedback and scores.
+📊 Performance Reports: View mentor evaluations and feedback.
 
-🧑‍🏫 Mentor Side
+🧑‍🏫 Mentor Dashboard
 
-🛠️ Roadmap Builder: Create custom roadmaps with videos, assignments, and tasks.
+🛠️ Roadmap Builder: Add videos, assignments, and custom learning tasks.
 
-🧾 Student Management: Assign students and monitor progress.
+🧾 Student Management: Assign and track multiple students.
 
-💡 Respond to Queries: Interact through Q&A to support learning.
+💡 Respond to Queries: Support students through built-in Q&A.
 
-🧮 Evaluate Work: Provide feedback and grades for completed assignments.
+🧮 Evaluate Work: Provide feedback and grades for each roadmap.
 
 ⚙️ Tech Stack
 Layer	Technology
@@ -57,16 +57,16 @@ Authentication	JWT (jsonwebtoken), bcryptjs
 Validation & Security	express-validator, CORS
 🏗️ System Architecture
 Frontend (React)
-   ↕ Axios (API Calls)
+   ↕  Axios (API Calls)
 Backend (Node + Express)
-   ↕ Mongoose (ODM)
+   ↕  Mongoose (ODM)
 Database (MongoDB)
 
 🗂️ Project Structure
 MentorConnect/
 ├── backend/
 │   ├── config/           → Database connection
-│   ├── controllers/      → Business logic for Auth, Mentor, Roadmap
+│   ├── controllers/      → Business logic (Auth, Mentor, Roadmap)
 │   ├── middleware/       → JWT Authentication middleware
 │   ├── models/           → MongoDB schemas
 │   ├── routes/           → Express route definitions
@@ -76,23 +76,23 @@ MentorConnect/
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── components/   → UI components (Navbar, etc.)
-│   │   ├── pages/        → Page components (Login, Dashboards)
+│   │   ├── components/   → Reusable UI components (Navbar, Cards, etc.)
+│   │   ├── pages/        → Page views (Login, Dashboard, Mentor, etc.)
 │   │   ├── services/     → API service layer
-│   │   └── main.jsx      → App entry point
+│   │   └── main.jsx      → App entry
 │   ├── public/           → Static assets
 │   └── vite.config.js    → Vite setup
 └── README.md
 
 🔐 Authentication Flow
 
-🔏 Passwords hashed using bcrypt before storage
+🔏 Passwords are hashed using bcrypt before storage
 
-🪪 JWT tokens issued on login and stored in localStorage
+🪪 JWT tokens are issued upon login and stored in localStorage
 
-🧭 Protected routes validated using middleware
+🧭 Protected routes validated via custom middleware
 
-🔒 Role-based access (student/mentor) enforced for route protection
+🔒 Role-based access for student and mentor dashboards
 
 🧠 Database Models
 🧑‍💻 User Model
@@ -100,25 +100,25 @@ Field	Type	Description
 name	String	User’s name
 email	String	Unique email ID
 password	String	Hashed password
-role	String	“student” or “mentor”
+role	String	"student" or "mentor"
 domain	String	Mentor’s area of expertise
-experience	String	Mentor experience
+experience	String	Years of experience
 bio	String	Mentor profile summary
 🗺️ RoadmapItem Model
 Field	Type	Description
 title	String	Roadmap title
-description	String	Roadmap overview
+description	String	Overview
 student	ObjectId	Reference to Student
 mentor	ObjectId	Reference to Mentor
 status	Enum	pending / in-progress / completed
-tasks	Array	List of tasks with completion status
+tasks	Array	List of tasks
 videos	Array	Resource links
 assignments	Array	Assignments and submissions
 questions	Array	Q&A between student and mentor
 score	Number	Mentor-assigned score
 feedback	String	Mentor feedback
 💻 Installation & Setup
-1️⃣ Clone the Repository
+1️⃣ Clone Repository
 git clone <repository-url>
 cd MentorConnect
 
@@ -141,30 +141,28 @@ npm install
 
 4️⃣ Run Application
 
-Start Backend:
+Start Backend
 
 cd backend
 npm run dev
 
 
-Start Frontend:
+Start Frontend
 
 cd frontend
 npm run dev
 
 
-🔗 Backend runs on: http://localhost:5000
-🌐 Frontend runs on: http://localhost:3000
+🌐 Frontend: http://localhost:3000
 
-🌱 Optional: Database Seed
+🔗 Backend: http://localhost:5000
 
-Populate database with sample mentors, students, and roadmaps:
+🌱 Optional: Database Seeding
+
+To populate with sample data:
 
 cd backend
 npm run seed
-
-
-Sample Accounts
 
 Role	Email	Password
 Student	alice@example.com
@@ -187,10 +185,10 @@ GET	/api/mentors	Get all mentors
 GET	/api/mentors/:id	Get mentor by ID
 🗺️ Roadmaps
 Method	Endpoint	Description
-GET	/api/roadmap	Get all user roadmaps
+GET	/api/roadmap	Get user roadmaps
 POST	/api/roadmap	Create roadmap (mentor)
 PUT	/api/roadmap/:id	Update roadmap
-DELETE	/api/roadmap/:id	Delete roadmap (mentor)
+DELETE	/api/roadmap/:id	Delete roadmap
 POST	/api/roadmap/:id/question	Add question (student)
 PUT	/api/roadmap/:id/question/:questionId	Answer question (mentor)
 💡 Usage Guide
@@ -206,59 +204,67 @@ Complete assigned tasks
 
 Ask questions
 
-Track scores and feedback
+View scores and feedback
 
 🧑‍🏫 For Mentors
 
 Register and login
 
-Create custom roadmaps
+Create roadmaps
 
 Assign students
 
-Track their progress
+Track progress
 
 Evaluate submissions and reply to queries
 
-🧩 Development Notes
+🧩 Development Highlights
 
-Modular architecture (controllers, models, routes separated)
+🧱 Modular architecture with separate controllers, routes, and models
 
-Express error handling middleware
+⚙️ Express middleware for unified error handling
 
-React components designed for reusability
+🎨 Reusable React components for UI consistency
 
-Axios service layer for clean API integration
+🌐 Axios service layer for clean API management
 
-🧭 Deployment Guide
+🧭 Deployment
 🗄️ Backend
 
-Host on Render / Railway / Heroku
-
-Set environment variables in deployment settings
+Hosted on Render: https://mentorconnectendermproject.onrender.com
 
 Use MongoDB Atlas for production DB
 
+Configure environment variables on Render
+
 🌐 Frontend
 
-Build production version:
+Deployed on Vercel: https://mentorconnectendermproject-almf3surd.vercel.app
+
+Build production files:
 
 npm run build
 
 
-Deploy /dist folder to Netlify / Vercel
+Deploy /dist folder to Vercel or Netlify
 
 Update API base URL in api.js
 
 🧰 Troubleshooting
 Issue	Solution
-MongoDB not connecting	Check MONGO_URI, ensure MongoDB service is running
+MongoDB not connecting	Check MONGO_URI and ensure MongoDB service is active
 Port in use	Change PORT in .env
-CORS error	Ensure backend CORS middleware is enabled
-Login fails	Check bcrypt hash or JWT secret consistency
+CORS error	Ensure CORS middleware is enabled
+Login fails	Verify bcrypt hash and JWT secret consistency
 🧾 License
 
-Licensed under the MIT License – free to use for learning, modification, and development.
+Licensed under the MIT License – free for use, learning, and development.
 
-Built By
+👨‍💻 Built By
+
 Pranav Bharadwaj
+
+Backend & Full-Stack Developer
+
+🌍 Backend: Render Deployment:https://mentorconnectendermproject.onrender.com
+💻 Frontend: Vercel Deployment:https://mentorconnectendermproject.vercel.app
