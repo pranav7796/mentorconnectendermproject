@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { favoritesAPI } from '../services/api';
 
 const FavoriteButton = ({ mentorId, initialFavorited = false }) => {
     const [favorited, setFavorited] = useState(initialFavorited);
@@ -9,9 +9,7 @@ const FavoriteButton = ({ mentorId, initialFavorited = false }) => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.post(`/api/mentors/${mentorId}/favorite`, {}, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await favoritesAPI.toggleFavorite(mentorId);
             setFavorited(!favorited);
         } catch (error) {
             console.error('Failed to toggle favorite:', error);

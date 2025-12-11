@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { mentorAPI } from '../services/api';
 
 const StudentMentorView = () => {
     const [mentor, setMentor] = useState(null);
@@ -12,9 +12,7 @@ const StudentMentorView = () => {
     const fetchMentor = async () => {
         try {
             const token = localStorage.getItem('token');
-            const { data } = await axios.get('/api/mentors', {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const { data } = await mentorAPI.getAllMentors();
             setMentor(data.data[0] || null);
         } catch (error) {
             console.error(error);

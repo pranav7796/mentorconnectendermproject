@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { authAPI, mentorAPI, roadmapAPI, requestAPI } from '../services/api';
 import XPBar from '../components/gamification/XPBar';
 import LevelCard from '../components/gamification/LevelCard';
 import StreakWidget from '../components/gamification/StreakWidget';
@@ -31,13 +31,13 @@ const StudentDashboardNew = () => {
             const headers = { Authorization: `Bearer ${token}` };
 
             // 1. Get fresh user data
-            const userRes = await axios.get('/api/auth/me', { headers });
+            const userRes = await authAPI.getMe();
             const userData = userRes.data.data;
             setUser(userData);
             setGamification(userData?.gamification || gamification);
 
             // 2. Get mentors (behavior depends on assignment status)
-            const mentorRes = await axios.get('/api/mentors', { headers });
+            const mentorRes = await mentorAPI.getAllMentors();
 
             if (userData.assignedMentor) {
                 // If assigned, the API returns the single mentor
@@ -48,7 +48,7 @@ const StudentDashboardNew = () => {
             }
 
             // 3. Get roadmaps
-            const roadmapsRes = await axios.get('/api/roadmap', { headers });
+            const roadmapsRes = await roadmapAPI.getAllRoadmaps();
             setRoadmaps(roadmapsRes.data.data || []);
 
         } catch (error) {
@@ -60,11 +60,10 @@ const StudentDashboardNew = () => {
 
     const handleRequestMentor = async (mentorId) => {
         try {
-            const token = localStorage.getItem('token');
-            await axios.post('/api/requests/send',
-                { mentorId, message: "I'd like to connect!" },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await requestAPI.sendRequest({
+                mentorId,
+                message: "I'd like to connect!"
+            });
             alert('Request sent successfully! 📨');
         } catch (error) {
             alert(error.response?.data?.message || 'Failed to send request');

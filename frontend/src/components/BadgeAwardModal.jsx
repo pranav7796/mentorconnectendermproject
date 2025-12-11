@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { gamificationAPI } from '../services/api';
 
 const BadgeAwardModal = ({ studentId, studentName, onClose, onSuccess }) => {
     const [badgeName, setBadgeName] = useState('');
@@ -21,10 +21,11 @@ const BadgeAwardModal = ({ studentId, studentName, onClose, onSuccess }) => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.post('/api/gamification/award-badge',
-                { studentId, badgeName, icon: selectedIcon },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await gamificationAPI.awardBadge({
+                studentId,
+                badgeType: badgeName,
+                reason: selectedIcon
+            });
             alert(`Badge "${badgeName}" awarded to ${studentName}!`);
             onSuccess && onSuccess();
             onClose();

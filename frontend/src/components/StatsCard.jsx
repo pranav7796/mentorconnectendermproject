@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { statsAPI } from '../services/api';
 
 const StatsCard = () => {
     const [stats, setStats] = useState(null);
@@ -9,9 +9,7 @@ const StatsCard = () => {
         const fetchStats = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const { data } = await axios.get('/api/mentors/stats/overview', {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const { data } = await statsAPI.getOverview();
                 setStats(data);
             } catch (error) {
                 console.error('Failed to fetch stats:', error);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { mentorAPI, requestAPI, roadmapAPI } from '../services/api';
 import BadgeAwardModal from '../components/BadgeAwardModal';
 import CreateRoadmapModal from '../components/CreateRoadmapModal';
 import RoadmapCard from '../components/RoadmapCard';
@@ -26,9 +26,9 @@ const MentorDashboardNew = () => {
             const headers = { Authorization: `Bearer ${token}` };
 
             const [studentsRes, requestsRes, roadmapsRes] = await Promise.all([
-                axios.get('/api/mentors', { headers }),
-                axios.get('/api/requests/pending', { headers }),
-                axios.get('/api/roadmap', { headers })
+                mentorAPI.getAllMentors(),
+                requestAPI.getPendingRequests(),
+                roadmapAPI.getAllRoadmaps()
             ]);
 
             setStudents(studentsRes.data.data || []);
@@ -43,11 +43,7 @@ const MentorDashboardNew = () => {
 
     const handleAcceptRequest = async (requestId) => {
         try {
-            const token = localStorage.getItem('token');
-            await axios.patch(`/api/requests/${requestId}/respond`,
-                { status: 'accepted' },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await requestAPI.respondToRequest(requestId, { status: 'accepted' });
             fetchData();
         } catch (error) {
             console.error(error);
@@ -56,11 +52,7 @@ const MentorDashboardNew = () => {
 
     const handleRejectRequest = async (requestId) => {
         try {
-            const token = localStorage.getItem('token');
-            await axios.patch(`/api/requests/${requestId}/respond`,
-                { status: 'rejected' },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await requestAPI.respondToRequest(requestId, { status: 'rejected' });
             fetchData();
         } catch (error) {
             console.error(error);

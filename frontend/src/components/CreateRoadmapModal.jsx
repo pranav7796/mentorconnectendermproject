@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { roadmapAPI } from '../services/api';
 
 const CreateRoadmapModal = ({ isOpen, onClose, students, onSuccess }) => {
     const [formData, setFormData] = useState({
@@ -30,9 +30,7 @@ const CreateRoadmapModal = ({ isOpen, onClose, students, onSuccess }) => {
                 // videos and assignments already objects
             };
 
-            await axios.post('/api/roadmap', payload, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            await roadmapAPI.createRoadmap(payload);
 
             onSuccess();
             onClose();

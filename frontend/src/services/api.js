@@ -49,7 +49,39 @@ export const roadmapAPI = {
   deleteRoadmap: (id) => api.delete(`/roadmap/${id}`),
   addQuestion: (id, question) => api.post(`/roadmap/${id}/question`, { question }),
   answerQuestion: (id, questionId, answer) =>
-    api.put(`/roadmap/${id}/question/${questionId}`, { answer })
+    api.put(`/roadmap/${id}/question/${questionId}`, { answer }),
+  submitTask: (roadmapId, taskId, submission) =>
+    api.put(`/roadmap/${roadmapId}/tasks/${taskId}/submit`, submission),
+  reviewTask: (roadmapId, taskId, review) =>
+    api.put(`/roadmap/${roadmapId}/tasks/${taskId}/review`, review)
+};
+
+// Request API (Mentor-Student matching)
+export const requestAPI = {
+  getPendingRequests: () => api.get('/requests/pending'),
+  sendRequest: (data) => api.post('/requests/send', data),
+  respondToRequest: (requestId, data) => api.patch(`/requests/${requestId}/respond`, data)
+};
+
+// Chat API
+export const chatAPI = {
+  getMessages: (userId) => api.get(`/chat/${userId}`)
+};
+
+// Gamification API
+export const gamificationAPI = {
+  awardXP: (data) => api.post('/gamification/award-xp', data),
+  awardBadge: (data) => api.post('/gamification/award-badge', data)
+};
+
+// Stats API
+export const statsAPI = {
+  getOverview: () => api.get('/mentors/stats/overview')
+};
+
+// Favorites API
+export const favoritesAPI = {
+  toggleFavorite: (mentorId) => api.post(`/mentors/${mentorId}/favorite`)
 };
 
 export default api;

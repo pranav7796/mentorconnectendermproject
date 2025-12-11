@@ -3,6 +3,7 @@ import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import io from 'socket.io-client';
 import config from '../config';
+import { mentorAPI, chatAPI } from '../services/api';
 
 const ChatPage = () => {
     const { userId } = useParams(); // The other person's ID
@@ -56,14 +57,14 @@ const ChatPage = () => {
                     // Logic to find user from available lists (Student/Mentor)
                     // For now, simpler to rely on lists. 
                     // As a student, get mentors. As mentor, get students.
-                    const res = await axios.get('/api/mentors', { headers });
+                    const res = await mentorAPI.getAllMentors();
                     const list = res.data.data; // Array of users
                     const found = list.find(u => u._id === userId);
                     if (found) setOtherUser(found);
                 }
 
                 // 2. Fetch Messages
-                const msgRes = await axios.get(`/api/chat/${userId}`, { headers });
+                const msgRes = await chatAPI.getMessages(userId);
                 setMessages(msgRes.data);
 
             } catch (error) {

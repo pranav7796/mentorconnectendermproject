@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { roadmapAPI } from '../services/api';
 
 const RoadmapCard = ({ roadmap, userRole, onUpdate }) => {
     const [selectedTask, setSelectedTask] = useState(null);
@@ -25,11 +25,9 @@ const RoadmapCard = ({ roadmap, userRole, onUpdate }) => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`/api/roadmap/${roadmap._id}/tasks/${taskId}/submit`, {
-                submission,
-                comments
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
+            await roadmapAPI.submitTask(roadmap._id, taskId, {
+                submissionText: submission,
+                comment: comments
             });
 
             setSubmission('');
@@ -47,11 +45,9 @@ const RoadmapCard = ({ roadmap, userRole, onUpdate }) => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            await axios.put(`/api/roadmap/${roadmap._id}/tasks/${taskId}/review`, {
+            await roadmapAPI.reviewTask(roadmap._id, taskId, {
                 status,
-                comments: reviewComments
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
+                feedback: reviewComments
             });
 
             onUpdate && onUpdate();

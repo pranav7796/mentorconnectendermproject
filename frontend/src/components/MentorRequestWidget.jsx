@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { requestAPI } from '../services/api';
 
 const MentorRequestWidget = ({ userRole }) => {
     const [requests, setRequests] = useState([]);
@@ -13,9 +13,7 @@ const MentorRequestWidget = ({ userRole }) => {
         try {
             const token = localStorage.getItem('token');
             const endpoint = userRole === 'mentor' ? '/api/requests/pending' : '/api/requests/my-requests';
-            const { data } = await axios.get(endpoint, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            const { data } = await requestAPI.getPendingRequests();
             setRequests(data);
         } catch (error) {
             console.error('Failed to fetch requests:', error);
@@ -27,10 +25,7 @@ const MentorRequestWidget = ({ userRole }) => {
     const handleRespond = async (requestId, status) => {
         try {
             const token = localStorage.getItem('token');
-            await axios.patch(`/api/requests/${requestId}/respond`,
-                { status },
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            await requestAPI.respondToRequest(requestId, { status });
             fetchRequests(); // Refresh
         } catch (error) {
             console.error('Failed to respond:', error);
