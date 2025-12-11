@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import { authAPI } from '../services/api';
 
 const Register = ({ setUser }) => {
   const navigate = useNavigate();
@@ -22,7 +23,8 @@ const Register = ({ setUser }) => {
     setError('');
 
     try {
-      const response = await axios.post('/api/auth/register', formData);
+      // const response = await axios.post('/api/auth/register', formData);
+      const response = await authAPI.register(formData);
       const { data } = response.data; // Backend returns { success: true, data: { ...user, token } }
 
       localStorage.setItem('token', data.token);
@@ -36,6 +38,7 @@ const Register = ({ setUser }) => {
         navigate('/mentor-dashboard-new');
       }
     } catch (err) {
+      console.log(err)
       console.error('Registration error:', err.response?.data);
       setError(err.response?.data?.message || err.response?.data?.error || 'Registration failed');
     } finally {

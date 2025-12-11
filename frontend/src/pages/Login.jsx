@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
+import { authAPI } from '../services/api';
 
 const Login = ({ setUser }) => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Login = ({ setUser }) => {
     setError('');
 
     try {
-      const response = await axios.post('/api/auth/login', formData);
+      const response = await authAPI.login(formData);
       const { data } = response.data; // Backend returns { success: true, data: { ...user, token } }
 
       localStorage.setItem('token', data.token);
