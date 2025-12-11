@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import StudentDashboard from './pages/StudentDashboard';
-import MentorDashboard from './pages/MentorDashboard';
+import StudentDashboardNew from './pages/StudentDashboardNew';
+import MentorDashboardNew from './pages/MentorDashboardNew';
+import ChatPage from './pages/ChatPage';
+import CodeEditor from './components/code/CodeEditor';
 import './App.css';
 
 function App() {
@@ -12,58 +13,74 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    try {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser && storedUser !== 'undefined') {
+        setUser(JSON.parse(storedUser));
+      }
+    } catch (error) {
+      console.error('Error parsing user from localStorage:', error);
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
     }
     setLoading(false);
   }, []);
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 flex items-center justify-center">
+        <div className="text-2xl text-purple-300">Loading...</div>
+      </div>
+    );
   }
 
   return (
     <Router>
       <div className="app">
-        <Navbar user={user} setUser={setUser} />
-        <main className="main-content">
+        <main>
           <Routes>
             <Route path="/" element={
               user ? (
                 user.role === 'student' ? (
-                  <Navigate to="/student-dashboard" />
+                  <Navigate to="/student-dashboard-new" />
                 ) : (
-                  <Navigate to="/mentor-dashboard" />
+                  <Navigate to="/mentor-dashboard-new" />
                 )
               ) : (
                 <Navigate to="/login" />
               )
             } />
-            
+
             <Route path="/login" element={
               user ? <Navigate to="/" /> : <Login setUser={setUser} />
             } />
-            
+
             <Route path="/register" element={
               user ? <Navigate to="/" /> : <Register setUser={setUser} />
             } />
-            
-            <Route path="/student-dashboard" element={
+
+            <Route path="/student-dashboard-new" element={
               user && user.role === 'student' ? (
-                <StudentDashboard user={user} />
+                <StudentDashboardNew user={user} />
               ) : (
                 <Navigate to="/login" />
               )
             } />
-            
-            <Route path="/mentor-dashboard" element={
+
+            <Route path="/mentor-dashboard-new" element={
               user && user.role === 'mentor' ? (
-                <MentorDashboard user={user} />
+                <MentorDashboardNew user={user} />
               ) : (
                 <Navigate to="/login" />
               )
+            } />
+
+            <Route path="/code-editor" element={
+              user ? <CodeEditor /> : <Navigate to="/login" />
+            } />
+
+            <Route path="/chat/:userId" element={
+              user ? <ChatPage /> : <Navigate to="/login" />
             } />
           </Routes>
         </main>

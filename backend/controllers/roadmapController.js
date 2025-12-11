@@ -7,11 +7,11 @@ const { validationResult } = require('express-validator');
 const getRoadmapItems = async (req, res) => {
   try {
     let query;
-    
+
     // If student, get their assigned roadmap items
     if (req.user.role === 'student') {
       query = { student: req.user._id };
-    } 
+    }
     // If mentor, get roadmap items they created
     else if (req.user.role === 'mentor') {
       query = { mentor: req.user._id };
@@ -20,7 +20,7 @@ const getRoadmapItems = async (req, res) => {
     const roadmapItems = await RoadmapItem.find(query)
       .populate('student', 'name email')
       .populate('mentor', 'name email domain');
-    
+
     res.json({
       success: true,
       count: roadmapItems.length,
@@ -40,14 +40,14 @@ const getRoadmapItem = async (req, res) => {
     const roadmapItem = await RoadmapItem.findById(req.params.id)
       .populate('student', 'name email')
       .populate('mentor', 'name email domain');
-    
+
     if (!roadmapItem) {
       return res.status(404).json({ success: false, message: 'Roadmap item not found' });
     }
 
     // Check if user is authorized to view this roadmap item
     if (roadmapItem.student._id.toString() !== req.user._id.toString() &&
-        roadmapItem.mentor._id.toString() !== req.user._id.toString()) {
+      roadmapItem.mentor._id.toString() !== req.user._id.toString()) {
       return res.status(403).json({ success: false, message: 'Not authorized to view this roadmap item' });
     }
 
@@ -111,7 +111,7 @@ const updateRoadmapItem = async (req, res) => {
 
     // Check authorization
     if (roadmapItem.student.toString() !== req.user._id.toString() &&
-        roadmapItem.mentor.toString() !== req.user._id.toString()) {
+      roadmapItem.mentor.toString() !== req.user._id.toString()) {
       return res.status(403).json({ success: false, message: 'Not authorized to update this roadmap item' });
     }
 
@@ -122,8 +122,8 @@ const updateRoadmapItem = async (req, res) => {
       req.body,
       { new: true, runValidators: true }
     )
-    .populate('student', 'name email')
-    .populate('mentor', 'name email domain');
+      .populate('student', 'name email')
+      .populate('mentor', 'name email domain');
 
     res.json({
       success: true,
@@ -229,6 +229,157 @@ const answerQuestion = async (req, res) => {
   }
 };
 
+// @desc    Submit a task
+// @route   PUT /api/roadmap/:id/tasks/:taskId/submit
+// @access  Private (Student only)
+const submitTask = async (req, res) => {
+  try {
+    const roadmapItem = await RoadmapItem.findById(req.params.id);
+
+    if (!roadmapItem) {
+      return res.status(404).json({ success: false, message: 'Roadmap item not found' });
+    }
+
+    if (roadmapItem.student.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    const task = roadmapItem.tasks.id(req.params.taskId);
+    if (!task) {
+      return res.status(404).json({ success: false, message: 'Task not found' });
+    }
+
+    task.submission = req.body.submission;
+    task.studentComments = req.body.comments || '';
+    task.status = 'submitted';
+    task.submittedAt = Date.now();
+
+    await roadmapItem.save();
+
+    res.json({
+      success: true,
+      data: roadmapItem
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Review a task (approve/reject)
+// @route   PUT /api/roadmap/:id/tasks/:taskId/review
+// @access  Private (Mentor only)
+const reviewTask = async (req, res) => {
+  try {
+    const roadmapItem = await RoadmapItem.findById(req.params.id);
+
+    if (!roadmapItem) {
+      return res.status(404).json({ success: false, message: 'Roadmap item not found' });
+    }
+
+    if (roadmapItem.mentor.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    const task = roadmapItem.tasks.id(req.params.taskId);
+    if (!task) {
+      return res.status(404).json({ success: false, message: 'Task not found' });
+    }
+
+    task.status = req.body.status; // 'approved' or 'rejected'
+    task.mentorComments = req.body.comments || '';
+    task.reviewedAt = Date.now();
+
+    if (req.body.status === 'approved') {
+      task.isCompleted = true;
+    }
+
+    await roadmapItem.save();
+
+    res.json({
+      success: true,
+      data: roadmapItem
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Submit an assignment
+// @route   PUT /api/roadmap/:id/assignments/:assignmentId/submit
+// @access  Private (Student only)
+const submitAssignment = async (req, res) => {
+  try {
+    const roadmapItem = await RoadmapItem.findById(req.params.id);
+
+    if (!roadmapItem) {
+      return res.status(404).json({ success: false, message: 'Roadmap item not found' });
+    }
+
+    if (roadmapItem.student.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    const assignment = roadmapItem.assignments.id(req.params.assignmentId);
+    if (!assignment) {
+      return res.status(404).json({ success: false, message: 'Assignment not found' });
+    }
+
+    assignment.submission = req.body.submission;
+    assignment.submissionLink = req.body.link || '';
+    assignment.studentComments = req.body.comments || '';
+    assignment.status = 'submitted';
+    assignment.submittedAt = Date.now();
+
+    await roadmapItem.save();
+
+    res.json({
+      success: true,
+      data: roadmapItem
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+// @desc    Review an assignment
+// @route   PUT /api/roadmap/:id/assignments/:assignmentId/review
+// @access  Private (Mentor only)
+const reviewAssignment = async (req, res) => {
+  try {
+    const roadmapItem = await RoadmapItem.findById(req.params.id);
+
+    if (!roadmapItem) {
+      return res.status(404).json({ success: false, message: 'Roadmap item not found' });
+    }
+
+    if (roadmapItem.mentor.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    }
+
+    const assignment = roadmapItem.assignments.id(req.params.assignmentId);
+    if (!assignment) {
+      return res.status(404).json({ success: false, message: 'Assignment not found' });
+    }
+
+    assignment.status = req.body.status; // 'approved' or 'rejected'
+    assignment.mentorComments = req.body.comments || '';
+    assignment.reviewedAt = Date.now();
+
+    await roadmapItem.save();
+
+    res.json({
+      success: true,
+      data: roadmapItem
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   getRoadmapItems,
   getRoadmapItem,
@@ -236,5 +387,9 @@ module.exports = {
   updateRoadmapItem,
   deleteRoadmapItem,
   addQuestion,
-  answerQuestion
+  answerQuestion,
+  submitTask,
+  reviewTask,
+  submitAssignment,
+  reviewAssignment
 };

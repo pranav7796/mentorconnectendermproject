@@ -37,4 +37,12 @@ router.route('/:id')
 router.post('/:id/question', studentOnly, addQuestion);
 router.put('/:id/question/:questionId', mentorOnly, answerQuestion);
 
+// Task submission and review routes
+router.put('/:id/tasks/:taskId/submit', studentOnly, require('../controllers/roadmapController').submitTask);
+router.put('/:id/tasks/:taskId/review', mentorOnly, require('../controllers/roadmapController').reviewTask);
+
+// Assignment submission and review routes
+router.put('/:id/assignments/:assignmentId/submit', studentOnly, require('../controllers/roadmapController').submitAssignment);
+router.put('/:id/assignments/:assignmentId/review', mentorOnly, require('../controllers/roadmapController').reviewAssignment);
+
 module.exports = router;
